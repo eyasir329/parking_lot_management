@@ -7,9 +7,9 @@
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "c:/Users/eyasi/OneDrive/Documents/GitHub/parking_lot_management",
-      "program": "c:/Users/eyasi/OneDrive/Documents/GitHub/parking_lot_management/build/Debug/outDebug",
+      "externalConsole": false,
+      "cwd": "/home/eyasir/Documents/parking_lot_management",
+      "program": "/home/eyasir/Documents/parking_lot_management/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
