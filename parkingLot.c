@@ -23,33 +23,21 @@
 #define SOUTHMID 1
 #define SOUTHMIN 3        
 
-//parkingLotInitialize
-//findAvailableSpace
-//vehiclePark
-//freeParkingSpace
-//plotNo
-//location
-//avail
-//parkinginfop
-//linkedlist
-//queue
-
 //ParkingLotInfo
-// typedef struct {
-//     int plotNo;
-//     int id;
-//     int AvailSpaceN;
-//     int SpaceOccupied;
-//     char location;
-//     struct parkingLot* next;
-// } parkingLot;
+typedef struct {
+    int plotNo;
+    int AvailSpaceN;
+    int SpaceOccupied;
+    char location;
+    struct parkingLot* next;
+} parkingLot;
 
-// //CarInfo
-// typedef struct {
-//     int id;
-//     int needSpace;
-//     char needLocation;
-// } Vehicle;
+//CarInfo
+typedef struct {
+    int id;
+    int needSpace;
+    char needLocation;
+} Vehicle;
 
 // //Function to initialize Parking Plot
 // void initializeParkingLot(parkingLot* ParkSpace, int carID,int cSpace,int cPlot,char cLocation,int nc){
