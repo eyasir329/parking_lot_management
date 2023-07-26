@@ -34,10 +34,18 @@ struct parkingNode
 struct parkingNode *head;
 
 // avail space
-void availSpace()
+void availSpace(int carID,int needSpace,char Location)
 {
-
     int pre = 0;
+    //something have to do
+    if(Location=='e'&&needSpace==200){
+        pre=1;
+    }if(Location=='e'&&needSpace==150){
+        pre=2;
+    }if(Location=='e'&&needSpace==100){
+        pre=3;
+    }
+    //finish that here
     // east location
     int eastSize = EASTMAX + EASTMID + EASTMIN;
     struct parkingNode eastNode[eastSize];
@@ -59,6 +67,15 @@ void availSpace()
                 eastNode[i].needSPACE = 100;
             }
             eastNode[i].location = 'e';
+        }else if(pre==1){
+            eastNode[i].carid = carID;
+            eastNode[i].needSPACE = 200;
+        }else if(pre==2){
+            eastNode[i].carid = carID;
+            eastNode[i].needSPACE = 150;
+        }else if(pre==3){
+            eastNode[i].carid = carID;
+            eastNode[i].needSPACE = 100;
         }
     }
     // west
@@ -159,26 +176,44 @@ void availSpace()
 }
 
 // add at the beginning of our parking lot
-void beginsert(int CarID, int needSpace, char Location)
+void beginsert()
 {
+    int carID=0;
+    int needSpace=0;
+    char Location=' ';
+    printf("Enter Carid :");
+    scanf("%d", &carID);
+    printf("Enter Location [e,w,n,s]: ");
+    scanf("%c", &Location);
+    printf("\nRequired Space [%d, %d, %d] :", MAXSPACE, MIDIUMSPACE, MINSPACE);
+    scanf("%d", &needSpace);
+    printf("\n");
     struct parkingNode *ptr;
     int item;
     ptr = (struct parkingNode *)malloc(sizeof(struct parkingNode *));
     if (ptr == NULL)
     {
         printf("\nOVERFLOW");
-        availSpace(CarID,needSpace,Location);
+        //availSpace(CarID,needSpace,Location);
     }
     else
     {
-        ptr->carid = CarID;
+        ptr->carid = carID;
         ptr->location = Location;
         ptr->nextpNode = head;
         head = ptr;
-        printf("\nNode inserted");
+        printf("\nCar %d is parked successfully\n",carID);
+        rewriteAvail(carID,needSpace,Location);
     }
 }
 
+//Rewrite avail space
+void rewriteAvail(int carID,int needSpace,char Location){
+    //printf("%d %c %d",carID,Location,needSpace);
+    availSpace(carID,Location,needSpace);
+}
+
+//display that are just imported
 void display()
 {
     struct parkingNode *ptr;
@@ -202,10 +237,9 @@ void display()
 // main function
 int main()
 {
-    int carID;
-    int needSpace;
-    char Location;
-
+    int carID=0;
+    int needSpace=0;
+    char Location=' ';
     //
     int choice = 0;
     while (choice != 9)
@@ -219,17 +253,9 @@ int main()
         switch (choice)
         {
         case 0:
-            availSpace();
-            break;
+            availSpace(carID,needSpace,Location);
         case 1:
-            printf("Enter Carid :");
-            scanf("%d", &carID);
-            printf("Required Space [%d, %d, %d] :", MAXSPACE, MIDIUMSPACE, MINSPACE);
-            scanf("%d", &needSpace);
-            printf("Enter Location [e,w,n,s]: ");
-            scanf("%c", &Location);
-            printf("\n");
-            beginsert(carID, needSpace, Location);
+            beginsert();
             break;
 
         case 8:
