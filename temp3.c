@@ -23,6 +23,12 @@
 #define SOUTHMID 1
 #define SOUTHMIN 3
 
+// size of each locatiom
+int eastSize = EASTMAX + EASTMID + EASTMIN;
+int westSize = WESTMAX + WESTMID + WESTMIN;
+int northSize = NORTHMAX + NORTHMID + NORTHMIN;
+int southSize = SOUTHMAX + SOUTHMID + SOUTHMIN;
+
 // each parking space have
 struct parkingNode
 {
@@ -65,13 +71,9 @@ void preAvailSpace()
 {
     printf("Pre Available Space:\n");
     // initializing total parking space
-    int eastSize = EASTMAX + EASTMID + EASTMIN;
     struct parkingNode eastNode[eastSize];
-    int westSize = WESTMAX + WESTMID + WESTMIN;
     struct parkingNode westNode[westSize];
-    int northSize = NORTHMAX + NORTHMID + NORTHMIN;
     struct parkingNode northNode[northSize];
-    int southSize = SOUTHMAX + SOUTHMID + SOUTHMIN;
     struct parkingNode southNode[southSize];
     // east
     for (int i = 0; i < eastSize; i++)
@@ -176,17 +178,13 @@ void preAvailSpace()
 // insert car in the parking lot
 void insertCarParking(int carID, int needSpace, char Location, int t, int c)
 {
-    //  initializing total parking space
-    int eastSize = EASTMAX + EASTMID + EASTMIN;
+    //  initializing total parking space=
     struct parkingNode eastNode[eastSize];
-    int westSize = WESTMAX + WESTMID + WESTMIN;
     struct parkingNode westNode[westSize];
-    int northSize = NORTHMAX + NORTHMID + NORTHMIN;
     struct parkingNode northNode[northSize];
-    int southSize = SOUTHMAX + SOUTHMID + SOUTHMIN;
     struct parkingNode southNode[southSize];
     // printing avail space
-    if (c!= 2)
+    if (c != 2)
     {
         printf("Inserted Car-%d Parking Successfully\n", carID);
         int pre;
@@ -249,26 +247,28 @@ void insertCarParking(int carID, int needSpace, char Location, int t, int c)
         // printf("%d %d %d %c",pre,carID,needSpace,Location);
         // temporary car array
         int carArr[100];
+        int line = 0;
         // conditional parking
+        // file
+        FILE *fileRead, *fileWrite;
         if (pre == 1)
         {
             // iteration t, that are in the main function
             // for east side
             // main add
+            fileWrite = fopen("parkingSpace.text", "a");
+            fprintf(fileWrite, "%d,%d,%c\n", carID, needSpace, Location);
+
             if (t < EASTMAX)
-            {
-                eastNode[t].carid = carID;
-                carArr[t] = carID;
-                eastNode[t].needSPACE = 200;
-                eastNode[t].location = 'e';
-            }
-            // other iteration for avail space
-            for (int i = 0; i < t; i++)
-            {
-                eastNode[i].carid = carArr[i];
-                eastNode[i].needSPACE = 200;
-                eastNode[i].location = 'e';
-            }
+
+                // other iteration for avail space
+                for (int i = 0; i < t; i++)
+                {
+                    eastNode[i].carid = carArr[i];
+                    eastNode[i].needSPACE = 200;
+                    eastNode[i].location = 'e';
+                }
+
             for (int i = t + 1; i < eastSize; i++)
             {
                 // something to do
@@ -343,6 +343,7 @@ void insertCarParking(int carID, int needSpace, char Location, int t, int c)
                 }
                 southNode[i].location = 's';
             }
+            fclose(fileWrite);
         }
     }
     else
@@ -395,6 +396,7 @@ int main()
         {
         case 0:
             preAvailSpace();
+            break;
         case 1:
             printf("Enter Car ID, Need Space[200,150,100], Location[e,w,n,s] [e.g. 123 200 w]: ");
             scanf("%d %d %c", &carID, &needSpace, &Location);
