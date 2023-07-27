@@ -699,7 +699,7 @@ void adminSwitch(int carID, int needSpace, char location)
     printf("=====================================================================\n");
     while (adminChoice != 9)
     {
-        printf("\n\t1.DeQueue Car from Waiting list One By One\n\t2.Insert that car in the Parking Lot\n\t3.Booked Space After Adding Car in the Parking Lot\n\t4.Available Space After Adding Car in the Parking Lot\n\t5.Apply All Car At one Place Before Searching a Car\n\t6.Searching a Car Using Car ID\n\t7.Leave the Parking Lot\n\t8.Display Car List In the Parking Lot\n\t9.Exit From Administration Mode\n");
+        printf("\n\t1.DeQueue Car from Waiting list One By One\n\t2.Insert that car in the Parking Lot\n\t3.Booked Space After Adding Car in the Parking Lot\n\t4.Available Space After Adding Car in the Parking Lot\n\t5.Apply All Car At one Place Before Searching a Car\n\tOr Display All Car\n\t6.Searching a Car Using Car ID\n\t7.Leave the Parking Lot\n\t8.Display Car List After the Car Leave In the Parking Lot\n\t9.Exit From Administration Mode\n");
         printf("\n\t\tEnter your choice : ");
         scanf("%d", &adminChoice);
         printf("=====================================================================\n");
