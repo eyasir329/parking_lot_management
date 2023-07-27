@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 // pre built
 #define TOTALPLOT 5
 #define MAXSPACE 200    // east 4 west 2 north 3 south 2
 #define MIDIUMSPACE 150 // east 1 west 3 north 2 south 1
 #define MINSPACE 100    // east 3 west 1 north 1 south 3
-// numofspace in each direction
+
+// num of space in each direction
 #define EASTMAX 4
 #define EASTMID 1
 #define EASTMIN 3
@@ -188,8 +190,7 @@ struct carNode *carDequeue()
     struct carNode *tempQueue;
     if (frontCar == NULL)
     {
-        printf("\nUnderflow\n");
-        // return -1;
+        tempQueue->CarID=0;
     }
     else
     {
@@ -203,9 +204,6 @@ struct carNode *carDequeue()
         // return temp_data;
         return tempQueue;
     }
-    printf("=====================================================================\n");
-    printf("\t\tMoving Car ID:%d Waiting list to Main Parking Slot Successfully\n", tempQueue->CarID);
-    printf("=====================================================================\n");
 }
 
 // Display all elements of the queue
@@ -218,21 +216,21 @@ void displayQueue()
     }
     else
     {
-        printf("Car Waiting list is:\n \n");
+        printf("Car Waiting list is:\n----------------------------\n");
         temp = frontCar;
         while (temp != NULL)
         {
             printf("Car ID :%d Need Space :%d Location :%c--->\n", temp->CarID, temp->NeedSpace, temp->Location);
             temp = temp->nextCar;
         }
-        printf("NULL\n");
     }
 }
 
 // pre available space
 void preAvailSpace()
 {
-    printf("Pre Available Space:\n");
+    printf("\t\tPre Available Space:\n");
+    printf("=====================================================================\n");
     // initializing total parking space
     struct parkingNode eastNode[eastSize];
     struct parkingNode westNode[westSize];
@@ -314,24 +312,28 @@ void preAvailSpace()
     // print available space
     printf("\n");
     printf("In East Location :\n");
+    printf("----------------------------------\n");
     for (int i = 0; i < eastSize; i++)
     {
         printf("Car Id :%d Space :%d Location :%c\n", eastNode[i].carid, eastNode[i].needSPACE, eastNode[i].location);
     }
     printf("\n");
     printf("In West Location :\n");
+    printf("----------------------------------\n");
     for (int i = 0; i < westSize; i++)
     {
         printf("Car Id :%d Space :%d Location :%c\n", westNode[i].carid, westNode[i].needSPACE, westNode[i].location);
     }
     printf("\n");
     printf("In North Location :\n");
+    printf("----------------------------------\n");
     for (int i = 0; i < northSize; i++)
     {
         printf("Car Id :%d Space :%d Location :%c\n", northNode[i].carid, northNode[i].needSPACE, northNode[i].location);
     }
     printf("\n");
     printf("In South Location :\n");
+    printf("----------------------------------\n");
     for (int i = 0; i < southSize; i++)
     {
         printf("Car Id :%d Space :%d Location :%c\n", southNode[i].carid, southNode[i].needSPACE, southNode[i].location);
@@ -341,258 +343,311 @@ void preAvailSpace()
 // user switch case
 void userSwitch(int carID, int needSpace, char location)
 {
-    int userChoice, pay;
+    int userChoice, pay, step=0;
     while (userChoice != 6)
     {
-        printf("\n\t\t1.Have to Book a Space\n\t\t2.Receive Your PreBooked Slip\n\t\t3.Payment Confirmation\n\t\t4.Confirmation Slip\n\t\t5.Display Car Waiting List\n\t\t6.Exit from User Mode\n");
+        printf("\n\t\t1.Booked a Space\n\t\t2.PreBooked Slip\n\t\t3.Payment Confirmation\n\t\t4.Confirmation Slip\n\t\t5.Car Waiting List\n\t\t6.Exit from User Mode\n");
+        printf("\n\t\t[Complete step 1 to 5 then booked again]\n");
         printf("\n\n\t\tEnter your choice : ");
         scanf("%d", &userChoice);
         switch (userChoice)
         {
         case 1:
-            printf("=====================================================================\n");
-            printf("\t\tYou have to Insert a car in our Parking Space\n");
-            printf("=====================================================================\n");
-            printf("\t\tPlease Fill up the Requirement that we need\n");
-            printf("\t\tCar ID: ");
-            scanf("%d", &carID);
-            printf("\n\t\tHow much space in your car need [100,150,200]: ");
-            scanf("%d", &needSpace);
-            printf("\n\t\tEnter location that you prefer\n\t\t[East-e,West-w,North-n,South-s]: ");
-            scanf("%s", &location);
-            if ((needSpace == 100 || needSpace == 150 || needSpace == 200) && (location == 'e' || location == 'w' || location == 'n' || location == 's'))
+            if (step == 0)
             {
-                carEnqueue(carID, needSpace, location);
+                printf("=====================================================================\n");
+                printf("\t\tYou have to Insert a car in our Parking Space\n");
+                printf("=====================================================================\n");
+                printf("\t\tPlease Fill up the Requirement that we need\n");
+                printf("\t\tCar ID: ");
+                scanf("%d", &carID);
+                printf("\n\t\tHow much space in your car need [100,150,200]: ");
+                scanf("%d", &needSpace);
+                printf("\n\t\tEnter location that you prefer\n\t\t[East-e,West-w,North-n,South-s]: ");
+                scanf("%s", &location);
+                if ((needSpace == 100 || needSpace == 150 || needSpace == 200) && (location == 'e' || location == 'w' || location == 'n' || location == 's'))
+                {
+                    carEnqueue(carID, needSpace, location);
+                }
+                else
+                {
+                    printf("=====================================================================\n");
+                    printf("\t\tInput Requirement Failed\n");
+                    printf("\t\tPlease Input Again!\n");
+                    printf("=====================================================================\n");
+                }
+                step++;
             }
             else
             {
-                printf("=====================================================================\n");
-                printf("\t\tInput Requirement Failed\n");
-                printf("\t\tPlease Input Again!\n");
-                printf("=====================================================================\n");
+                printf("----------------------------------------------------------------------\n");
+                printf("\t\tPlease Follow The Step Two\n");
+                printf("----------------------------------------------------------------------\n");
             }
             break;
         case 2:
-            FILE *preBook;
-            preBook = fopen("preBooked.text", "w");
-            if (preBook == NULL)
+            if (step == 1)
             {
-                printf("Error To Making the Slip");
-            }
-            else
-            {
-                if (carID != 0)
+                FILE *preBook;
+                preBook = fopen("preBooked.text", "w");
+                if (preBook == NULL)
                 {
-                    fprintf(preBook, "===========================================\n");
-                    fprintf(preBook, "\t\tABC Parking Company\n");
-                    fprintf(preBook, "===========================================\n");
-                    fprintf(preBook, "\t\tWaiting Confirmation\n\n");
-                    fprintf(preBook, "\t\tCar ID :%d\n", carID);
-                    fprintf(preBook, "\t\tNeed Space :%d\n", needSpace);
-                    // location
-                    if (location == 'e')
-                    {
-                        fprintf(preBook, "\t\tLocation :EAST\n");
-                    }
-                    else if (location == 'w')
-                    {
-                        fprintf(preBook, "\t\tLocation :WEST\n");
-                    }
-                    else if (location == 'n')
-                    {
-                        fprintf(preBook, "\t\tLocation :NORTH\n");
-                    }
-                    else
-                    {
-                        fprintf(preBook, "\t\tLocation :SOUTH\n");
-                    }
-                    // pay
-                    if (needSpace == 100)
-                    {
-                        fprintf(preBook, "\t\tHave to Pay :100TK\n");
-                    }
-                    else if (needSpace == 150)
-                    {
-                        fprintf(preBook, "\t\tHave to Pay :200TK\n");
-                    }
-                    else
-                    {
-                        fprintf(preBook, "\t\tHave to Pay :300TK\n");
-                    }
-                    fprintf(preBook, "\t\tWaiting From Payment Confirmation\n");
-                    fprintf(preBook, "===========================================\n");
-                    fprintf(preBook, "\t\tThanks For Choosing Our Services\n");
-                    fprintf(preBook, "===========================================\n");
-                    printf("=====================================================================\n");
-                    printf("\t\tSuccessfully Done To Make PreBooked Slip\n");
-                    printf("=====================================================================\n");
+                    printf("Error To Making the Slip");
                 }
                 else
                 {
-                    printf("=====================================================================\n");
-                    printf("\t\tRequirement Failed\n");
-                    printf("\t\tYou have to make a slip before you enter a car\n");
-                    printf("=====================================================================\n");
+                    if (carID != 0)
+                    {
+                        fprintf(preBook, "===========================================\n");
+                        fprintf(preBook, "\t\tABC Parking Company\n");
+                        fprintf(preBook, "===========================================\n");
+                        fprintf(preBook, "\t\tWaiting Confirmation\n\n");
+                        fprintf(preBook, "\t\tCar ID :%d\n", carID);
+                        fprintf(preBook, "\t\tNeed Space :%d\n", needSpace);
+                        // location
+                        if (location == 'e')
+                        {
+                            fprintf(preBook, "\t\tLocation :EAST\n");
+                        }
+                        else if (location == 'w')
+                        {
+                            fprintf(preBook, "\t\tLocation :WEST\n");
+                        }
+                        else if (location == 'n')
+                        {
+                            fprintf(preBook, "\t\tLocation :NORTH\n");
+                        }
+                        else
+                        {
+                            fprintf(preBook, "\t\tLocation :SOUTH\n");
+                        }
+                        // pay
+                        if (needSpace == 100)
+                        {
+                            fprintf(preBook, "\t\tHave to Pay :100TK\n");
+                        }
+                        else if (needSpace == 150)
+                        {
+                            fprintf(preBook, "\t\tHave to Pay :200TK\n");
+                        }
+                        else
+                        {
+                            fprintf(preBook, "\t\tHave to Pay :300TK\n");
+                        }
+                        fprintf(preBook, "\t\tWaiting From Payment Confirmation\n");
+                        fprintf(preBook, "===========================================\n");
+                        fprintf(preBook, "\t\tThanks For Choosing Our Services\n");
+                        fprintf(preBook, "===========================================\n");
+                        printf("=====================================================================\n");
+                        printf("\t\tSuccessfully Done To Make PreBooked Slip\n");
+                        printf("=====================================================================\n");
+                    }
+                    else
+                    {
+                        printf("=====================================================================\n");
+                        printf("\t\tRequirement Failed\n");
+                        printf("\t\tYou have to make a slip before you enter a car\n");
+                        printf("=====================================================================\n");
+                    }
                 }
+                fclose(preBook);
+                step++;
             }
-            fclose(preBook);
+            else
+            {
+                printf("----------------------------------------------------------------------\n");
+                printf("\t\tPlease Complete The First Step\n");
+                printf("----------------------------------------------------------------------\n");
+            }
             break;
         case 3:
-            printf("=====================================================================\n");
-            printf("\t\tPayment Confirmation\n");
-            printf("=====================================================================\n");
-            FILE *fPay;
-            fPay = fopen("payment.csv", "a");
-            if (fPay == NULL)
+            if (step == 2)
             {
-                printf("\n\t\tpayment.csv not find\n");
-            }
-            if (needSpace == 100)
-            {
-                printf("\t\tHave to Pay :100TK\n");
-                printf("\n\t\tEnter You Payment :");
-                scanf("%d", &pay);
-                if (pay == 100)
+                printf("=====================================================================\n");
+                printf("\t\tPayment Confirmation\n");
+                printf("=====================================================================\n");
+                FILE *fPay;
+                fPay = fopen("payment.csv", "a");
+                if (fPay == NULL)
                 {
-                    printf("=====================================================================\n");
-                    printf("\t\tYour Payment is Done\n");
-                    printf("=====================================================================\n");
-                    fprintf(fPay, "%d,%d\n", carID, pay);
+                    printf("\n\t\tpayment.csv not find\n");
+                }
+                if (needSpace == 100)
+                {
+                    printf("\t\tHave to Pay :100TK\n");
+                    printf("\n\t\tEnter You Payment :");
+                    scanf("%d", &pay);
+                    if (pay == 100)
+                    {
+                        printf("=====================================================================\n");
+                        printf("\t\tYour Payment is Done\n");
+                        printf("=====================================================================\n");
+                        fprintf(fPay, "%d,%d\n", carID, pay);
+                    }
+                    else
+                    {
+                        printf("\n\t\tYou Tried Wrong Payment");
+                        printf("\n----------------------------------------------\n");
+                    }
+                }
+                else if (needSpace == 150)
+                {
+                    printf("\t\tHave to Pay :200TK\n");
+                    printf("\n\t\tEnter You Payment :");
+                    scanf("%d", &pay);
+                    if (pay == 200)
+                    {
+                        printf("=====================================================================\n");
+                        printf("\t\tYour Payment is Done\n");
+                        printf("=====================================================================\n");
+                        fprintf(fPay, "%d,%d\n", carID, pay);
+                    }
+                    else
+                    {
+                        printf("\n\t\tYou Tried Wrong Payment");
+                    }
                 }
                 else
                 {
-                    printf("\n\t\tYou Tried Wrong Payment");
+                    printf("\t\tHave to Pay :300TK\n");
+                    printf("\n\t\tEnter You Payment :");
+                    scanf("%d", &pay);
+                    if (pay == 300)
+                    {
+                        printf("=====================================================================\n");
+                        printf("\t\tYour Payment is Done\n");
+                        printf("=====================================================================\n");
+                        fprintf(fPay, "%d,%d\n", carID, pay);
+                    }
+                    else
+                    {
+                        printf("\n\t\tYou Tried Wrong Payment");
+                    }
                 }
-            }
-            else if (needSpace == 150)
+                fclose(fPay);
+                step++;
+            }else
             {
-                printf("\t\tHave to Pay :200TK\n");
-                printf("\n\t\tEnter You Payment :");
-                scanf("%d", &pay);
-                if (pay == 200)
-                {
-                    printf("=====================================================================\n");
-                    printf("\t\tYour Payment is Done\n");
-                    printf("=====================================================================\n");
-                    fprintf(fPay, "%d,%d\n", carID, pay);
-                }
-                else
-                {
-                    printf("\n\t\tYou Tried Wrong Payment");
-                }
+                printf("----------------------------------------------------------------------\n");
+                printf("\t\tPlease Complete The Second Step\n");
+                printf("----------------------------------------------------------------------\n");
             }
-            else
-            {
-                printf("\t\tHave to Pay :300TK\n");
-                printf("\n\t\tEnter You Payment :");
-                scanf("%d", &pay);
-                if (pay == 300)
-                {
-                    printf("=====================================================================\n");
-                    printf("\t\tYour Payment is Done\n");
-                    printf("=====================================================================\n");
-                    fprintf(fPay, "%d,%d\n", carID, pay);
-                }
-                else
-                {
-                    printf("\n\t\tYou Tried Wrong Payment");
-                }
-            }
-            fclose(fPay);
             break;
         case 4:
-            printf("=====================================================================\n");
-            printf("\t\tReceive The Slip\n");
-            printf("=====================================================================\n");
-            FILE *paySlip;
-            paySlip = fopen("paymentConfirmed.text", "w");
-            if (paySlip == NULL)
+            if (step == 3)
             {
-                printf("Error To Making the Slip");
-            }
-            else
-            {
-                if (carID != 0)
+                printf("=====================================================================\n");
+                printf("\t\tReceive The Slip\n");
+                printf("=====================================================================\n");
+                FILE *paySlip;
+                paySlip = fopen("paymentConfirmed.text", "w");
+                if (paySlip == NULL)
                 {
-                    fprintf(paySlip, "===========================================\n");
-                    fprintf(paySlip, "\t\tABC Parking Company\n");
-                    fprintf(paySlip, "===========================================\n");
-                    fprintf(paySlip, "\t\tPayment Slip\n\n");
-                    fprintf(paySlip, "\t\tCar ID :%d\n", carID);
-                    fprintf(paySlip, "\t\tNeed Space :%d\n", needSpace);
-                    // location
-                    if (location == 'e')
-                    {
-                        fprintf(paySlip, "\t\tLocation :EAST\n");
-                    }
-                    else if (location == 'w')
-                    {
-                        fprintf(paySlip, "\t\tLocation :WEST\n");
-                    }
-                    else if (location == 'n')
-                    {
-                        fprintf(paySlip, "\t\tLocation :NORTH\n");
-                    }
-                    else
-                    {
-                        fprintf(paySlip, "\t\tLocation :SOUTH\n");
-                    }
-                    // pay
-                    if (needSpace == 100)
-                    {
-                        if (pay == 100)
-                        {
-                            fprintf(paySlip, "\t\tPayment Done 100TK\n");
-                        }
-                        else
-                        {
-                            fprintf(paySlip, "\t\tPayment Not Done 100TK\n");
-                        }
-                    }
-                    else if (needSpace == 150)
-                    {
-                        if (pay == 200)
-                        {
-                            fprintf(paySlip, "\t\tPayment Done 200TK\n");
-                        }
-                        else
-                        {
-                            fprintf(paySlip, "\t\tPayment Not Done 200TK\n");
-                        }
-                    }
-                    else
-                    {
-                        if (pay == 300)
-                        {
-                            fprintf(paySlip, "\t\tPayment Done 300TK\n");
-                        }
-                        else
-                        {
-                            fprintf(paySlip, "\t\tPayment Not Done 300TK\n");
-                        }
-                    }
-                    fprintf(paySlip, "\t\tPayment Confirmed\n");
-                    fprintf(paySlip, "===========================================\n");
-                    fprintf(paySlip, "\t\tThanks For Choosing Our Services\n");
-                    fprintf(paySlip, "===========================================\n");
-                    printf("\t\tSuccessfully Done To Make Payment Slip\n");
-                    printf("=====================================================================\n");
+                    printf("Error To Making the Slip");
                 }
                 else
                 {
-                    printf("=====================================================================\n");
-                    printf("\t\tRequirement Failed\n");
-                    printf("\t\tYou have to make a slip before you enter a car\n");
-                    printf("=====================================================================\n");
+                    if (carID != 0)
+                    {
+                        fprintf(paySlip, "===========================================\n");
+                        fprintf(paySlip, "\t\tABC Parking Company\n");
+                        fprintf(paySlip, "===========================================\n");
+                        fprintf(paySlip, "\t\tPayment Slip\n\n");
+                        fprintf(paySlip, "\t\tCar ID :%d\n", carID);
+                        fprintf(paySlip, "\t\tNeed Space :%d\n", needSpace);
+                        // location
+                        if (location == 'e')
+                        {
+                            fprintf(paySlip, "\t\tLocation :EAST\n");
+                        }
+                        else if (location == 'w')
+                        {
+                            fprintf(paySlip, "\t\tLocation :WEST\n");
+                        }
+                        else if (location == 'n')
+                        {
+                            fprintf(paySlip, "\t\tLocation :NORTH\n");
+                        }
+                        else
+                        {
+                            fprintf(paySlip, "\t\tLocation :SOUTH\n");
+                        }
+                        // pay
+                        if (needSpace == 100)
+                        {
+                            if (pay == 100)
+                            {
+                                fprintf(paySlip, "\t\tPayment Done 100TK\n");
+                            }
+                            else
+                            {
+                                fprintf(paySlip, "\t\tPayment Not Done 100TK\n");
+                            }
+                        }
+                        else if (needSpace == 150)
+                        {
+                            if (pay == 200)
+                            {
+                                fprintf(paySlip, "\t\tPayment Done 200TK\n");
+                            }
+                            else
+                            {
+                                fprintf(paySlip, "\t\tPayment Not Done 200TK\n");
+                            }
+                        }
+                        else
+                        {
+                            if (pay == 300)
+                            {
+                                fprintf(paySlip, "\t\tPayment Done 300TK\n");
+                            }
+                            else
+                            {
+                                fprintf(paySlip, "\t\tPayment Not Done 300TK\n");
+                            }
+                        }
+                        fprintf(paySlip, "\t\tPayment Confirmed\n");
+                        fprintf(paySlip, "===========================================\n");
+                        fprintf(paySlip, "\t\tThanks For Choosing Our Services\n");
+                        fprintf(paySlip, "===========================================\n");
+                        printf("\t\tSuccessfully Done To Make Payment Slip\n");
+                        printf("=====================================================================\n");
+                    }
+                    else
+                    {
+                        printf("=====================================================================\n");
+                        printf("\t\tRequirement Failed\n");
+                        printf("\t\tYou have to make a slip before you enter a car\n");
+                        printf("=====================================================================\n");
+                    }
                 }
+                fclose(paySlip);
+                step++;
             }
-            fclose(paySlip);
+            else
+            {
+                printf("----------------------------------------------------------------------\n");
+                printf("\t\tPlease Complete The Third Step\n");
+                printf("----------------------------------------------------------------------\n");
+            }
+
             break;
         case 5:
-            printf("=====================================================================\n");
-            printf("Display All Car That are just enroled in our waiting list\n");
-            displayQueue();
-            printf("=====================================================================\n");
+            if (step == 4)
+            {
+                printf("=====================================================================\n");
+                printf("Display Car That are just Enroled in our Waiting List\n");
+                printf("----------------------------------------------------------------\n");
+                displayQueue();
+                printf("=====================================================================\n");
+                step=0;
+            }
+            else
+            {
+                printf("----------------------------------------------------------------------\n");
+                printf("\t\tPlease Complete The Fourth Step\n");
+                printf("----------------------------------------------------------------------\n");
+            }
             break;
         case 6:
             printf("=====================================================================\n");
@@ -638,33 +693,43 @@ void adminSwitch(int carID, int needSpace, char location)
     int lcarID;
     int lneedSpace;
     char lLocation;
-    int key;
+    int key,admin=0;
 
     int adminChoice = 0;
     printf("=====================================================================\n");
     while (adminChoice != 9)
     {
-        printf("\n0.Pre Available Space\n1.DeQueue\n2.Insert car in the parking lot\n3.Printing Booked Space After Adding Car in the Parking Lor\n4.Available Space After Adding Car in the Parking Lot\n5.Print All Linked List At one Place\n6.Searching a Car Using Car ID\n7.Free Up the Space\n7.Display After Deletion\n8.Display Final Linked List\n9.Exit From Administration Mode\n");
+        printf("\n\t1.DeQueue Car from Waiting list One By One\n\t2.Insert that car in the Parking Lot\n\t3.Booked Space After Adding Car in the Parking Lot\n\t4.Available Space After Adding Car in the Parking Lot\n\t5.Apply All Car At one Place Before Searching a Car\n\t6.Searching a Car Using Car ID\n\t7.Leave the Parking Lot\n\t8.Display Car List In the Parking Lot\n\t9.Exit From Administration Mode\n");
         printf("\n\t\tEnter your choice : ");
         scanf("%d", &adminChoice);
         printf("=====================================================================\n");
         switch (adminChoice)
         {
-        case 0:
-            preAvailSpace();
-            break;
         case 1:
             struct carNode *tempQueue = carDequeue();
-            printf("%d %d %c\n", tempQueue->CarID, tempQueue->NeedSpace, tempQueue->Location);
-            lcarID = tempQueue->CarID;
-            lneedSpace = tempQueue->NeedSpace;
-            lLocation = tempQueue->Location;
+            if (tempQueue->CarID != 0)
+            {
+                printf("\t\tCar ID:%d, Need Space:%d, Location:%c\n", tempQueue->CarID, tempQueue->NeedSpace, tempQueue->Location);
+                printf("\t\tDeQueue Successfully\n");
+                printf("-------------------------------------------------\n");
+                lcarID = tempQueue->CarID;
+                lneedSpace = tempQueue->NeedSpace;
+                lLocation = tempQueue->Location;
+                admin++;
+            }else{
+                printf("\t\tPlease Complete User Profile\n");
+                printf("--------------------------------------------------------------------------\n");
+            }
             break;
         case 2:
+        if(admin==2){
+
             // some condition
             // have to do
             // east side start
             // EAST MAX
+            printf("\t\tInsert Car ID:%d in our Parking Lot Successfully\n",lcarID);
+            printf("-------------------------------------------------\n");
             if (lLocation == 'e' && lneedSpace == 200)
             {
                 if (ems == EASTMAX)
@@ -879,58 +944,76 @@ void adminSwitch(int carID, int needSpace, char location)
                 printf("Your Input isn't fill our requirement\nPlease Try Again!\n");
             }
             // south side end
+            printf("=====================================================================\n");
             // condition end
+        }else{
+            printf("\t\tComplete Step One First\n");
+            printf("---------------------------------------------------------------------\n");
+        }
             break;
 
         case 3:
-            printf("Booked Space After adding Car\n");
+            printf("\t\tBooked Space After adding Car\n");
+            ("=====================================================================\n");
 
             printf("East Location\n");
+            printf("--------------------------------------\n");
             displayList(eastMAX);
             displayList(eastMID);
             displayList(eastMIN);
 
-            printf("West Location\n");
+            printf("\nWest Location\n");
+            printf("--------------------------------------\n");
             displayList(westMAX);
             displayList(westMID);
             displayList(westMIN);
 
-            printf("North Location\n");
+            printf("\nNorth Location\n");
+            printf("--------------------------------------\n");
             displayList(northMAX);
             displayList(northMID);
             displayList(northMIN);
 
-            printf("South Location\n");
+            printf("\nSouth Location\n");
+            printf("--------------------------------------\n");
             displayList(southMAX);
             displayList(southMID);
             displayList(southMIN);
+            printf("=====================================================================\n");
             break;
         case 4:
-            printf("Availabe Space After adding Car\n");
+            printf("\t\t===Availabe Space===\n");
+            printf("=====================================================================\n");
 
-            printf("Total Space Available in the East side\n");
+            printf("\nTotal Space Available in the East side\n");
+            printf("--------------------------------------------------------\n");
             printf("200 Space Requirement : %d\n", EASTMAX - ems);
             printf("150 Space Requirement : %d\n", EASTMID - emis);
             printf("100 Space Requirement : %d\n", EASTMIN - emin);
 
-            printf("Total Space Available in the East side\n");
+            printf("\nTotal Space Available in the East side\n");
+            printf("---------------------------------------------------------\n");
             printf("200 Space Requirement : %d\n", WESTMAX - wms);
             printf("150 Space Requirement : %d\n", WESTMID - wmis);
             printf("100 Space Requirement : %d\n", WESTMIN - wmin);
 
-            printf("Total Space Available in the East side\n");
+            printf("\nTotal Space Available in the East side\n");
+            printf("---------------------------------------------------------\n");
             printf("200 Space Requirement : %d\n", NORTHMAX - nms);
             printf("150 Space Requirement : %d\n", NORTHMID - nmis);
             printf("100 Space Requirement : %d\n", NORTHMIN - nmin);
 
-            printf("Total Space Available in the East side\n");
+            printf("\nTotal Space Available in the East side\n");
+            printf("---------------------------------------------------------\n");
             printf("200 Space Requirement : %d\n", SOUTHMAX - sms);
             printf("150 Space Requirement : %d\n", SOUTHMID - smis);
             printf("100 Space Requirement : %d\n", SOUTHMIN - smin);
+            printf("=====================================================================\n");
             break;
         case 5:
             // concatenated each linked list for Searching
-            printf("Concatenate all List\n");
+            printf("\t\tConcatenate all Car\n");
+            printf("=====================================================================\n");
             struct parkingNode *concatenatedList = concatenateLists(eastMAX, eastMID);
             concatenatedList = concatenateLists(concatenatedList, eastMIN);
             concatenatedList = concatenateLists(concatenatedList, westMAX);
@@ -943,42 +1026,50 @@ void adminSwitch(int carID, int needSpace, char location)
             concatenatedList = concatenateLists(concatenatedList, southMID);
             concatenatedList = concatenateLists(concatenatedList, southMIN);
             displayList(concatenatedList);
+            printf("=====================================================================\n");
             break;
         case 6:
-            printf("Searching Car using Car ID\n");
-            printf("Enter Car ID:\n");
+            printf("\t\tSearching Car using Car ID\n");
+            printf("=====================================================================\n");
+            printf("Enter Car ID:");
             scanf("%d", &key);
             struct parkingNode *foundNode = search(concatenatedList, key);
             if (foundNode != NULL)
             {
-                printf("Car Found \n");
-                printf("Car ID :%d\nRequired Space :%d\nLocation :%c\n", foundNode->carid, foundNode->needSPACE, foundNode->location);
+                printf("\n---------------------------------------------------\n");
+                printf("\t\tCar Found \n");
+                printf("\n---------------------------------------------------\n");
+                printf("\t\tCar ID :%d\n\t\tRequired Space :%d\n\t\tLocation :%c\n", foundNode->carid, foundNode->needSPACE, foundNode->location);
             }
             else
             {
                 printf("Car ID :%d isn't Found in our list\n", lcarID);
             }
+            printf("=====================================================================\n");
             break;
         case 7:
-            printf("Delete a Car That are found in case 5\n");
+            printf("\t\tRemove a Car That are found in the Previous Step\n");
+            printf("=====================================================================\n");
             if (foundNode != NULL)
             {
                 deleteNode(&concatenatedList, key);
-                printf("Car ID %d deleted from the list\n", key);
+                printf("Car ID %d removed from our Parking list\n", key);
             }
             else
             {
                 printf("Car ID %d isn't deleted from the list\n", key);
             }
+            printf("=====================================================================\n");
             break;
         case 8:
-            printf("Show Final Linked List\n");
+            printf("\t\tShow Parking List Except That are leave in Previous Case\n");
+            printf("=====================================================================\n");
             displayList(concatenatedList);
+            printf("=====================================================================\n");
             break;
         case 9:
-            ("=====================================================================\n");
-            printf("Exited Successfully From the Administration Mode\n");
-            ("=====================================================================\n");
+            printf("\t\tExited Successfully From the Administration Mode\n");
+            printf("=====================================================================\n");
             break;
         default:
             printf("Please enter valid choice..");
@@ -999,7 +1090,7 @@ int main()
     printf("=====================================================================\n");
     while (choice != 40)
     {
-        printf("\t\t1.USER\n\t\t2.ADMINISTRATOR\n\t\t3.EXIT");
+        printf("\t\t1.USER\n\t\t2.ADMINISTRATOR\n\t\t3.Pre Available Space\n\t\t4.EXIT");
         printf("\n\n\t\tEnter your choice : ");
         scanf("%d", &choice);
         printf("=====================================================================\n");
@@ -1016,13 +1107,15 @@ int main()
             // admin panel
         case 2:
             printf("\t\tYou are Using Administrator Mode\n");
-            printf("=====================================================================\n");
             adminSwitch(carID, needSpace, location);
-            printf("=====================================================================\n");
             printf("\t\t\tChoose The User Mode\n");
             printf("=====================================================================\n");
             break;
         case 3:
+            preAvailSpace();
+            printf("=====================================================================\n");
+            printf("\t\t\tChoose The User Mode\n");
+            printf("=====================================================================\n");
             break;
         case 4:
             exit(0);
