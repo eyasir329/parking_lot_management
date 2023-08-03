@@ -190,7 +190,7 @@ struct carNode *carDequeue()
     struct carNode *tempQueue;
     if (frontCar == NULL)
     {
-        tempQueue->CarID=0;
+        tempQueue->CarID = 0;
     }
     else
     {
@@ -343,7 +343,7 @@ void preAvailSpace()
 // user switch case
 void userSwitch(int carID, int needSpace, char location)
 {
-    int userChoice, pay, step=0;
+    int userChoice, pay, step = 0;
     while (userChoice != 6)
     {
         printf("\n\t\t1.Booked a Space\n\t\t2.PreBooked Slip\n\t\t3.Payment Confirmation\n\t\t4.Confirmation Slip\n\t\t5.Car Waiting List\n\t\t6.Exit from User Mode\n");
@@ -526,7 +526,8 @@ void userSwitch(int carID, int needSpace, char location)
                 }
                 fclose(fPay);
                 step++;
-            }else
+            }
+            else
             {
                 printf("----------------------------------------------------------------------\n");
                 printf("\t\tPlease Complete The Second Step\n");
@@ -622,7 +623,7 @@ void userSwitch(int carID, int needSpace, char location)
                     }
                 }
                 fclose(paySlip);
-                step++;
+                step = 0;
             }
             else
             {
@@ -633,21 +634,11 @@ void userSwitch(int carID, int needSpace, char location)
 
             break;
         case 5:
-            if (step == 4)
-            {
-                printf("=====================================================================\n");
-                printf("Display Car That are just Enroled in our Waiting List\n");
-                printf("----------------------------------------------------------------\n");
-                displayQueue();
-                printf("=====================================================================\n");
-                step=0;
-            }
-            else
-            {
-                printf("----------------------------------------------------------------------\n");
-                printf("\t\tPlease Complete The Fourth Step\n");
-                printf("----------------------------------------------------------------------\n");
-            }
+            printf("=====================================================================\n");
+            printf("Display Car That are just Enroled in our Waiting List\n");
+            printf("----------------------------------------------------------------\n");
+            displayQueue();
+            printf("=====================================================================\n");
             break;
         case 6:
             printf("=====================================================================\n");
@@ -693,7 +684,7 @@ void adminSwitch(int carID, int needSpace, char location)
     int lcarID;
     int lneedSpace;
     char lLocation;
-    int key,admin=0;
+    int key;
 
     int adminChoice = 0;
     printf("=====================================================================\n");
@@ -706,6 +697,7 @@ void adminSwitch(int carID, int needSpace, char location)
         switch (adminChoice)
         {
         case 1:
+
             struct carNode *tempQueue = carDequeue();
             if (tempQueue->CarID != 0)
             {
@@ -715,20 +707,21 @@ void adminSwitch(int carID, int needSpace, char location)
                 lcarID = tempQueue->CarID;
                 lneedSpace = tempQueue->NeedSpace;
                 lLocation = tempQueue->Location;
-                admin++;
-            }else{
+            }
+            else
+            {
                 printf("\t\tPlease Complete User Profile\n");
                 printf("--------------------------------------------------------------------------\n");
             }
+
             break;
         case 2:
-        if(admin==2){
 
             // some condition
             // have to do
             // east side start
             // EAST MAX
-            printf("\t\tInsert Car ID:%d in our Parking Lot Successfully\n",lcarID);
+            printf("\t\tInsert Car ID:%d in our Parking Lot Successfully\n", lcarID);
             printf("-------------------------------------------------\n");
             if (lLocation == 'e' && lneedSpace == 200)
             {
@@ -946,10 +939,6 @@ void adminSwitch(int carID, int needSpace, char location)
             // south side end
             printf("=====================================================================\n");
             // condition end
-        }else{
-            printf("\t\tComplete Step One First\n");
-            printf("---------------------------------------------------------------------\n");
-        }
             break;
 
         case 3:
@@ -982,7 +971,7 @@ void adminSwitch(int carID, int needSpace, char location)
             printf("=====================================================================\n");
             break;
         case 4:
-            printf("\t\t===Availabe Space===\n");
+            printf("\t\tAvailabe Space\n");
             printf("=====================================================================\n");
 
             printf("\nTotal Space Available in the East side\n");
@@ -1043,7 +1032,7 @@ void adminSwitch(int carID, int needSpace, char location)
             }
             else
             {
-                printf("Car ID :%d isn't Found in our list\n", lcarID);
+                printf("Car ID :%d isn't Found in our list\n", key);
             }
             printf("=====================================================================\n");
             break;
@@ -1062,7 +1051,7 @@ void adminSwitch(int carID, int needSpace, char location)
             printf("=====================================================================\n");
             break;
         case 8:
-            printf("\t\tShow Parking List Except That are leave in Previous Case\n");
+            printf("\tShow Parking List Except That are leave in Previous Case\n");
             printf("=====================================================================\n");
             displayList(concatenatedList);
             printf("=====================================================================\n");
